@@ -16,6 +16,7 @@ app.use(express.json());
 
 UserRouter.post('/signup', async (req, res) => {
     const requiredBody = z.object({
+        username : z.string(),
         email: z.string().min(10).max(100).email(),
         password: z.string().min(5).max(10)
             .regex(/\d/, "Password must contain at least one digit")
@@ -30,7 +31,7 @@ UserRouter.post('/signup', async (req, res) => {
         });
     }
 
-    const { email, password } = req.body;
+    const { username, email, password } = req.body;
     try {
         const existingUser = await UserModel.findOne({ email });
         if (existingUser) {
@@ -38,6 +39,7 @@ UserRouter.post('/signup', async (req, res) => {
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         await UserModel.create({
+            username,
             email,
             password: hashedPassword
         });
