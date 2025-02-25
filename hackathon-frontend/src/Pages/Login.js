@@ -10,7 +10,7 @@ import { useState } from "react";
 
       const handleLogin = async () => {
         try {
-          const response = await fetch("/api/login", { // Updated endpoint
+          const response = await fetch("http://localhost:3000/api/user/signin", { // Updated endpoint
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -19,7 +19,10 @@ import { useState } from "react";
             }),
           });
 
+          const data = await response.json();
+
           if (response.ok) {
+            localStorage.setItem("token", data.token);
             alert("Login successful");
             navigate("/dashboard"); // Navigate to dashboard or desired route
           } else {

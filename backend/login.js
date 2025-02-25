@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const JWT_USER_SECRET = 'AADYA_ABHIYANTH';
 const { UserModel } = require('./db');
+const cors = require("cors");
 
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
@@ -12,6 +13,7 @@ const nodemailer = require('nodemailer');
 const UserRouter = Router();
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 UserRouter.post('/signup', async (req, res) => {
     const requiredBody = z.object({
@@ -83,7 +85,7 @@ UserRouter.post('/forgot-password', async (req, res) => {
             service: 'gmail',
             auth: {
                 user: 'varshithebesthavemula@gmail.com',
-                pass: '@failure'
+                pass: 'wsppugnsojpitjjf'
             }
         });
 
