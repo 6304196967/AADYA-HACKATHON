@@ -1,11 +1,11 @@
+require('dotenv').config();
 const { Router } = require('express');
 const express = require('express');
 const z = require('zod');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const JWT_USER_SECRET = 'AADYA_ABHIYANTH';
+const JWT_USER_SECRET = process.env.JWT_USER_SECRET;
 const { UserModel } = require('./db');
-const cors = require("cors");
 
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
@@ -13,7 +13,6 @@ const nodemailer = require('nodemailer');
 const UserRouter = Router();
 const app = express();
 app.use(express.json());
-app.use(cors());
 
 UserRouter.post('/signup', async (req, res) => {
     const requiredBody = z.object({
@@ -82,15 +81,18 @@ UserRouter.post('/forgot-password', async (req, res) => {
         }
         const resetToken = jwt.sign({ id: user._id }, JWT_USER_SECRET, { expiresIn: '15m' });
         const transporter = nodemailer.createTransport({
+            secure: true,
             service: 'gmail',
+            host: 'smtp.gmail.com',
+            port: 465,
             auth: {
-                user: 'varshithebesthavemula@gmail.com',
-                pass: 'wsppugnsojpitjjf'
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS
             }
         });
 
         const mailOptions = {
-            from: 'varshithabesthavemula@gmail.com',
+
             to: email,
             subject: 'Password Reset',
             html: `<p>You requested a password reset. Click <a href="http://localhost:3000/reset-password?token=${resetToken}">here</a> to reset your password. This link is valid for 15 minutes.</p>`
