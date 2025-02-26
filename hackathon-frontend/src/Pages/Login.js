@@ -10,30 +10,43 @@ import { useState } from "react";
 
       const handleLogin = async () => {
         try {
-          const response = await fetch("http://localhost:3000/api/user/signin", { // Updated endpoint
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email: email,
-              password: password
-            }),
-          });
-
-          const data = await response.json();
-
-          if (response.ok) {
-            localStorage.setItem("token", data.token);
-            alert("Login successful");
-            navigate("/dashboard"); // Navigate to dashboard or desired route
-          } else {
-            const errorData = await response.json();
-            alert(errorData.message || "Login failed"); // Display server message
-          }
+            const response = await fetch("http://localhost:3000/api/user/signin", { 
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+            });
+    
+            const data = await response.json();
+    
+            if (response.ok) {
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("role", data.role); // Store role in local storage
+    
+                alert("Login successful");
+    
+                // Navigate based on user role
+                if (data.role === "Admin") {
+                    navigate("/admin/dashboard");
+                } else if (data.role === "Faculty") {
+                    navigate("/faculty/dashboard");
+                } else if (data.role === "Student") {
+                  navigate("/student/dashboard");
+                }else if (data.role === "Club Coordinator") {
+                  navigate("/clubs/dashboard");
+                }else if (data.role === "Alumni") {
+                  navigate("/alumni/dashboard");
+                }else {
+                    alert("Unauthorized role");
+                }
+            } else {
+                alert(data.message || "Login failed");
+            }
         } catch (error) {
-          console.error("Error:", error);
-          alert("Network error occurred"); // Handle network errors
+            console.error("Error:", error);
+            alert("Network error occurred");
         }
-      };
+    };
+    
 
       return (
         <div className="login-container">
