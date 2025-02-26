@@ -1,125 +1,136 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "../../styles/ClubPage.css";
-import Sidebar from "../Components/adminsidebar";
+import React, { useState } from "react";
+import "../../styles/ClubPage.css"; // Ensure the correct path
+import Sidebar from "../Components/adminsidebar"; // Ensure the correct path
+const clubsData = [
+  {
+    id: 1,
+    name: "Coding Club",
+    image: "https://images.unsplash.com/photo-1593720219276-0b1eacd0aef4?w=400",
+    description: "A club for coding enthusiasts to enhance their programming skills.",
+    totalStudents: 120,
+    studentsByYear: {
+      E1: [{ name: "Alice", branch: "CSE" }, { name: "Bob", branch: "IT" }],
+      E2: [{ name: "Charlie", branch: "ECE" }, { name: "David", branch: "EEE" }],
+      E3: [{ name: "Eve", branch: "CSE" }, { name: "Frank", branch: "MECH" }],
+      E4: [{ name: "Grace", branch: "CSE" }, { name: "Hank", branch: "CIVIL" }],
+    },
+  },
+];
 
-const API_URL = "http://localhost:3000/api/clubs"; // Update this with your backend URL
-
-function ClubPage() {
-  const [clubs, setClubs] = useState([]);
+function AdminClubPage() {
   const [selectedClub, setSelectedClub] = useState(null);
-
-  useEffect(() => {
-    // Fetch clubs data from backend
-    const fetchClubs = async () => {
-      try {
-        const response = await axios.get(`${API_URL}`);
-        setClubs(response.data);
-      } catch (error) {
-        console.error("Error fetching clubs:", error);
-      }
-    };
-
-    fetchClubs();
-  }, []);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [newClub, setNewClub] = useState({
+    name: "",
+    image: "",
+    description: "",
+    totalStudents: 0,
+    studentsByYear: { E1: [], E2: [], E3: [], E4: [] },
+  });
+  const [clubs, setClubs] = useState(clubsData);
 
   const handleCardClick = (club) => {
     setSelectedClub(club);
   };
 
-  const handleJoinClub = async () => {
-    if (!selectedClub) return;
-    
-    try {
-      const response = await axios.post(`${API_URL}/join`, {
-        clubId: selectedClub._id,
-        name: localStorage.getItem("username"), 
-        email: localStorage.getItem("email"),
-        year: "E2",
-        branch: "CSE",
-      });
+  const handleCreateClub = () => {
+    setShowCreateForm(true);
+  };
 
-      alert(response.data.message);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewClub({ ...newClub, [name]: value });
+  };
 
-      // 🔥 Update selected club with new data
-      setSelectedClub(response.data.club);
-
-      // 🔥 Update clubs list so UI refreshes properly
-      setClubs((prevClubs) =>
-        prevClubs.map((club) =>
-          club._id === selectedClub._id ? response.data.club : club
-        )
-      );
-    } catch (error) {
-      console.error("Error joining club:", error);
-      alert(error.response?.data?.message || "Failed to join club.");
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newClubWithId = { ...newClub, id: clubs.length + 1 };
+    setClubs([...clubs, newClubWithId]);
+    setShowCreateForm(false);
+    setNewClub({
+      name: "",
+      image: "",
+      description: "",
+      totalStudents: 0,
+      studentsByYear: { E1: [], E2: [], E3: [], E4: [] },
+    });
   };
 
   return (
     <div className="container">
-      <Sidebar />
-      <h2 className="title">College Clubs</h2>
-
+        <Sidebar />
+      <h2 className="title">College Clubs (Admin)</h2>
       <div className="club-list">
-        {clubs.length > 0 ? (
-          clubs.map(
-            (club) =>
-              club && (
-                <div
-                  className={`club-card ${
-                    selectedClub && selectedClub._id === club._id ? "expanded" : ""
-                  }`}
-                  key={club._id}
-                  onClick={() => handleCardClick(club)}
-                >
-                  <img
-                    src={club.image || "default-image-url.jpg"}
-                    alt={club.name || "Club"}
-                    className="club-img"
-                  />
-                  <div className="club-info">
-                    <h3>{club.name || "Unnamed Club"}</h3>
-                    <p>{club.description || "No description available"}</p>
-                  </div>
-                </div>
-              )
-          )
-        ) : (
-          <p>Loading clubs...</p>
-        )}
+        {clubs.map((club) => (
+          <div
+            className="club-card"
+            key={club.id}
+            onClick={() => handleCardClick(club)}
+          >
+            <img src={club.image} alt={club.name} className="club-img" />
+            <div className="club-info">
+              <h3>{club.name}</h3>
+              <p>{club.description}</p>
+            </div>
+          </div>
+        ))}
+
+        <div className="club-card add-club-card" onClick={handleCreateClub}>
+          <div className="add-icon">+</div>
+          <p>Add New Club</p>
+        </div>
       </div>
 
-      {selectedClub && (
-        <div className="modal expanded-card">
-          <div className="modal-content">
-            <span className="close" onClick={() => setSelectedClub(null)}>&times;</span>
-            <h2>{selectedClub.name}</h2>
-            <p><strong>Description:</strong> {selectedClub.description}</p>
-            <p><strong>Total Students:</strong> {selectedClub.totalStudents}</p>
-            <p><strong>Students Coordinators by Year:</strong></p>
-            {Object.keys(selectedClub.studentsByYear || {}).map((year) => (
-              <div key={year}>
-                <h4>{year}</h4>
-                <table className="students-table">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Branch</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {selectedClub.studentsByYear[year].map((student, index) => (
-                      <tr key={index}>
-                        <td>{student.name}</td>
-                        <td>{student.branch}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+      {showCreateForm && (
+        <div className="modal">
+          <div className="modal-content club-form-container">
+            <span className="close" onClick={() => setShowCreateForm(false)}>&times;</span>
+            <h2>Create New Club</h2>
+            <form onSubmit={handleSubmit} className="club-form">
+              <div className="form-group">
+                <label>Club Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={newClub.name}
+                  onChange={handleInputChange}
+                  placeholder="Enter club name"
+                  required
+                />
               </div>
-            ))}
-            <button className="join-btn" onClick={handleJoinClub}>Join Club</button>
+              <div className="form-group">
+                <label>Image URL</label>
+                <input
+                  type="text"
+                  name="image"
+                  value={newClub.image}
+                  onChange={handleInputChange}
+                  placeholder="Paste image URL"
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Description</label>
+                <textarea
+                  name="description"
+                  value={newClub.description}
+                  onChange={handleInputChange}
+                  placeholder="Briefly describe the club"
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Total Students</label>
+                <input
+                  type="number"
+                  name="totalStudents"
+                  value={newClub.totalStudents}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <button type="submit" className="submit-btn">Create Club</button>
+            </form>
           </div>
         </div>
       )}
@@ -127,4 +138,4 @@ function ClubPage() {
   );
 }
 
-export default ClubPage;
+export default AdminClubPage;
