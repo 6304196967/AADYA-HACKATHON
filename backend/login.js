@@ -20,7 +20,8 @@ UserRouter.post('/signup', async (req, res) => {
         email: z.string().min(10).max(100).email(),
         password: z.string().min(5).max(10)
             .regex(/\d/, "Password must contain at least one digit")
-            .regex(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least one special character")
+            .regex(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least one special character"),
+        role: z.string()
     });
 
     const parsedBody = requiredBody.safeParse(req.body);
@@ -31,7 +32,7 @@ UserRouter.post('/signup', async (req, res) => {
         });
     }
 
-    const { username, email, password } = req.body;
+    const { username, email, password, role} = req.body;
     try {
         const existingUser = await UserModel.findOne({ email });
         if (existingUser) {
@@ -41,7 +42,8 @@ UserRouter.post('/signup', async (req, res) => {
         await UserModel.create({
             username,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            role
         });
 
         res.status(201).json({ message: 'Signed Up Successfully' });
@@ -55,23 +57,28 @@ UserRouter.post('/signin', async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await UserModel.findOne({ email });
+
         if (!user) {
             return res.status(400).json({ message: "Incorrect Credentials" });
         }
+
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
             return res.status(400).json({ message: "Invalid Password" });
         }
 
-        const token = jwt.sign({ id: user._id.toString() }, JWT_USER_SECRET);
+        // Generate JWT token with user ID and role
+        const token = jwt.sign({ id: user._id.toString(), role: user.role }, JWT_USER_SECRET);
 
-        res.json({ token });
+        // Send role along with token
+        res.json({ token, role: user.role });
 
     } catch (e) {
         console.error("Signin Error:", e);
         res.status(500).json({ message: "Internal Server Error" });
     }
 });
+
 
 UserRouter.post('/forgot-password', async (req, res) => {
     try {
