@@ -8,6 +8,7 @@ import Aschedule from "./Pages/Admin/schedule";
 import Aclubs from "./Pages/Admin/Clubs";
 import Adiscussions from "./Pages/Admin/Discussions";
 import Aalumni from "./Pages/Admin/Alumni";
+import Aclubsh from "../src/Pages/Admin/Clubs"
 function App() {
   return (
     <Router>
@@ -21,7 +22,7 @@ function App() {
         <Route path="/admin/clubs" element={<Aclubs />} />
         <Route path="/admin/discussions" element={<Adiscussions />} />
         <Route path="/admin/alumni" element={<Aalumni />} />       
-
+        <Route path="/ClubPage" element={<Aclubsh />} />
       
       </Routes>
     </Router>
