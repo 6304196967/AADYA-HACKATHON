@@ -1,168 +1,130 @@
-/* App.css */
-.App {
+/* discussion.css */
+
+.discussion-container {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 100vh;
+  }
+  
+  .main-content {
+    flex: 1;
+    padding: 20px;
     max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-}
-
-.App-header {
-    text-align: center;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
-}
-
-.post-form-container {
-    background-color: #f9f9f9;
+    margin: auto;
+  }
+  
+  .post-form-container {
+    background: #f8f9fa;
     padding: 20px;
     border-radius: 8px;
-    margin-bottom: 30px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.post-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.form-group label {
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-input, textarea {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .input-field {
+    width: 100%;
     padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
-}
-
-.submit-btn {
-    background-color: #4CAF50;
-    color: white;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+  }
+  
+  .submit-btn, .reply-btn, .delete-btn {
+    padding: 10px;
     border: none;
-    padding: 12px;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-}
-
-.submit-btn:hover {
-    background-color: #45a049;
-}
-
-.posts-container {
-    margin-top: 40px;
-}
-
-.post {
-    background-color: white;
-    border: 1px solid #eee;
-    border-radius: 8px;
+    margin-top: 10px;
+  }
+  
+  .submit-btn {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .reply-btn {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .delete-btn {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .posts-container {
+    margin-top: 20px;
+  }
+  
+  .post {
+    background: white;
     padding: 15px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.post-header {
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .post-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
-}
-
-.post-header h3 {
-    margin: 0;
-}
-
-.delete-btn {
-    background-color: #f44336;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.delete-btn:hover {
-    background-color: #d32f2f;
-}
-
-.post-content {
-    margin-bottom: 15px;
-    line-height: 1.5;
-}
-
-.post-footer {
-    display: flex;
-    justify-content: space-between;
-    color: #777;
-    font-size: 14px;
-    border-top: 1px solid #eee;
-    padding-top: 10px;
-}
-
-.no-posts {
-    text-align: center;
-    color: #777;
-    font-style: italic;
-}
-
-/* Reply Section */
-.reply-section {
-    margin-top: 15px;
-    display: flex;
-    gap: 10px;
-}
-
-.reply-section textarea {
-    flex-grow: 1;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
-.reply-btn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.reply-btn:hover {
-    background-color: #0056b3;
-}
-
-/* Replies */
-.replies {
-    margin-top: 15px;
-    padding-left: 15px;
-    border-left: 3px solid #ddd;
-}
-
-.reply {
-    background-color: #f9f9f9;
-    padding: 8px;
-    border-radius: 5px;
-    margin-top: 8px;
-}
-
-.reply p {
-    margin: 0;
-}
-
-.reply-user {
-    font-size: 0.85em;
+  }
+  
+  .post-content {
+    margin: 10px 0;
+  }
+  
+  .post-footer {
+    font-size: 0.9em;
     color: gray;
-}
+  }
+  
+  .reply-section {
+    margin-top: 10px;
+  }
+  
+  .replies {
+    margin-top: 10px;
+    padding-left: 20px;
+    border-left: 2px solid #ddd;
+  }
+  
+  .reply {
+    background: #f1f1f1;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+  }
+  
+  .no-posts, .no-replies {
+    text-align: center;
+    color: gray;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .discussion-container {
+      flex-direction: column;
+    }
+  
+    .main-content {
+      padding: 10px;
+    }
+  
+    .post-form-container {
+      padding: 15px;
+    }
+  
+    .post {
+      padding: 10px;
+    }
+  
+    .input-field {
+      padding: 8px;
+    }
+  
+    .submit-btn, .reply-btn, .delete-btn {
+      padding: 8px;
+    }
+  }
+  

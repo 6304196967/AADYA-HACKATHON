@@ -12,6 +12,7 @@ import Aschedule from "./Pages/Admin/schedule";
 import Aclubs from "./Pages/Admin/Clubs";
 import Adiscussions from "./Pages/Admin/Discussions";
 import Aalumni from "./Pages/Admin/Alumni";
+
 import FDashboard from "./Pages/Faculty/Dashboard";
 import Fschedule from "./Pages/Faculty/schedule";
 import Fclubs from "./Pages/Faculty/Clubs";
