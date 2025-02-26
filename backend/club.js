@@ -4,7 +4,7 @@ const { ClubModel } = require("./db");
 const clubRouter = express.Router();
 
 // Get all clubs
-clubRouter.get("/", async (req, res) => {
+clubRouter.get("/all", async (req, res) => {
   try {
     const clubs = await ClubModel.find();
     res.json(clubs);
@@ -13,31 +13,68 @@ clubRouter.get("/", async (req, res) => {
   }
 });
 
-// Join a club
-clubRouter.post("/join", async (req, res) => {
-    const { clubId, name, email, year, branch } = req.body;
-  
-    try {
-      const club = await ClubModel.findById(clubId);
-      if (!club) return res.status(404).json({ message: "Club not found" });
-  
-      
-      const isMember = club.members.some((member) => member.email === email);
-      if (isMember) return res.status(400).json({ message: "Already a member" });
-  
+// Add a new club
+clubRouter.post("/add", async (req, res) => {
+  const { name, description, totalMembers, imageURL } = req.body;
 
-      const updatedClub = await ClubModel.findByIdAndUpdate(
-        clubId,
-        { 
-          $push: { members: { name, email, year, branch } },
-          $inc: { totalStudents: 1 } 
-        },
-        { new: true } 
-      );
-  
-      res.json({ message: `Successfully joined ${updatedClub.name}`, club: updatedClub });
-    } catch (err) {
-      res.status(500).json({ error: err.message });
+  if (!name || !description || !totalMembers || !imageURL) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  try {
+    const newClub = new ClubModel({
+      name,
+      description,
+      totalStudents: totalMembers, // Mapping totalMembers to totalStudents
+      image: imageURL
+    });
+
+    await newClub.save();
+    res.status(201).json({ message: "Club added successfully", club: newClub });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+clubRouter.post("/join", async (req, res) => {
+  const { clubId, userName, userBranch, userYear } = req.body;
+
+  // Validate required fields
+  if (!clubId || !userName?.trim() || !userBranch?.trim() || !userYear?.trim()) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  try {
+    const club = await ClubModel.findById(clubId);
+    if (!club) {
+      return res.status(404).json({ message: "Club not found" });
     }
-  });
+
+    // Prevent duplicate membership
+    if (club.members.some(member => member.name === userName)) {
+      return res.status(400).json({ message: "User already joined this club" });
+    }
+
+    // Add user to members array
+    const newMember = { name: userName, branch: userBranch, year: userYear };
+    club.members.push(newMember);
+
+    // Update studentsByYear
+    if (!club.studentsByYear[userYear]) {
+      club.studentsByYear[userYear] = [];
+    }
+    club.studentsByYear[userYear].push(newMember);
+
+    // Increment totalStudents count
+    club.totalStudents += 1;
+
+    await club.save();
+    res.status(200).json({ message: "User joined successfully", club });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+
 module.exports = clubRouter;

@@ -2,7 +2,9 @@ const express = require("express");
 const { internModel } = require("./db");
 
 const internRouter = express.Router();
-app.post("/api/intern/add", async (req, res) => {
+
+// Add a new internship or opportunity
+internRouter.post("/add", async (req, res) => {
     try {
         const { type, title, companyOrOrganizer, url } = req.body;
 
@@ -13,8 +15,9 @@ app.post("/api/intern/add", async (req, res) => {
         const newOpportunity = new internModel({
             type,
             title,
-            companyOrOrganizer,
-            location: "N/A", // Add default if missing
+            companyOrOrganizer: companyOrOrganizer || "N/A", // Default if missing
+            url, // Store the URL
+            location: "N/A", // Default location
             description: "No description available" // Default description
         });
 
@@ -27,7 +30,7 @@ app.post("/api/intern/add", async (req, res) => {
     }
 });
 
-
+// Get all internships or opportunities
 internRouter.get("/all", async (req, res) => {
     try {
         const { type } = req.query;
@@ -38,6 +41,5 @@ internRouter.get("/all", async (req, res) => {
         res.status(500).json({ error: "Failed to fetch opportunities", details: error.message });
     }
 });
-
 
 module.exports = internRouter;
