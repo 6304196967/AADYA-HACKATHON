@@ -111,8 +111,8 @@ UserRouter.post('/forgot-password', async (req, res) => {
 });
 UserRouter.post('/reset-password', async (req, res) => {
     try {
-        const { token, newPassword } = req.body;
-
+        const {newPassword } = req.body;
+        const token = localStorage.getItem("token");
         const decoded = jwt.verify(token, JWT_USER_SECRET);
         const user = await UserModel.findById(decoded.id);
 
