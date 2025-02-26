@@ -1,0 +1,98 @@
+:root {
+    --primary-color: #3498db;
+    --primary-hover: #2980b9;
+    --secondary-color: #2ecc71;
+    --secondary-hover: #27ae60;
+    --background-start: #e0f7fa;
+    --background-end: #f1f8e9;
+    --title-color: #2c3e50;
+    --tagline-color: #7f8c8d;
+    --font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+  
+  .homepage-container {
+    position: relative; /* Enables absolute positioning for the header */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--background-start), var(--background-end));
+    text-align: center;
+    padding: 20px;
+    font-family: var(--font-family);
+    margin-right:280px;
+  }
+  
+  /* Header positioned at top-right */
+  .homepage-header {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  
+  .header-buttons {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .homepage-content {
+    max-width: 800px;
+    padding: 0 20px;
+  }
+  
+  .homepage-title {
+    font-size: 3.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--title-color);
+    font-weight: bold;
+  }
+  
+  .homepage-tagline {
+    font-size: 1.75rem;
+    margin-bottom: 2rem;
+    color: var(--tagline-color);
+    letter-spacing: 1px;
+  }
+  
+  .homepage-description {
+    font-size: 1.25rem;
+    color: var(--tagline-color);
+    line-height: 1.5;
+    margin: 0 auto;
+  }
+  
+  .btn {
+    padding: 15px 30px;
+    font-size: 1.125rem;
+    border: none;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  
+  .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .login-btn {
+    background-color: var(--primary-color);
+    color: #fff;
+  }
+  
+  .login-btn:hover {
+    background-color: var(--primary-hover);
+  }
+  
+  .signup-btn {
+    background-color: var(--secondary-color);
+    color: #fff;
+  }
+  
+  .signup-btn:hover {
+    background-color: var(--secondary-hover);
+  }
+  

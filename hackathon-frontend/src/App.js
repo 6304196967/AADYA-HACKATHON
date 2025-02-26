@@ -1,5 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './App.css';
+
+
+
+import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import ForgotPassword from "./Pages/Forgot";
@@ -19,7 +23,7 @@ import Sschedule from "./Pages/Student/schedule";
 import Sclubs from "./Pages/Student/Clubs";
 import Sdiscussions from "./Pages/Student/Discussions";
 import Salumni from "./Pages/Student/Alumni";
-
+import Sintern from "./Pages/Student/intern"; 
 
 import AlDashboard from "./Pages/Allumni/Dashboard";
 import Alschedule from "./Pages/Allumni/schedule";
@@ -37,7 +41,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot" element={<ForgotPassword />}/>
         
@@ -64,6 +69,7 @@ function App() {
         <Route path="/student/clubs" element={<Sclubs />} />
         <Route path="/student/discussions" element={<Sdiscussions />} />
         <Route path="/student/alumni" element={<Salumni />} /> 
+        <Route path="/student/intern" element={<Sintern />} />
 
         <Route path="/clubc" element={< CDashboard/>} />
         <Route path="/clubc/dashboard" element={<CDashboard />} />
