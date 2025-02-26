@@ -1,87 +1,93 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "../../styles/ClubPage.css";
 import Sidebar from "../Components/adminsidebar";
 
-const clubsData = [
-  {
-    id: 1,
-    name: "Coding Club",
-    image: "coding.jpeg",
-    description: "A club for coding enthusiasts to enhance their programming skills.",
-    totalStudents: 120,
-    studentsByYear: {
-      E1: [{ name: "Alice", branch: "CSE" }, { name: "Bob", branch: "IT" }],
-      E2: [{ name: "Charlie", branch: "ECE" }, { name: "David", branch: "EEE" }],
-      E3: [{ name: "Eve", branch: "CSE" }, { name: "Frank", branch: "MECH" }],
-      E4: [{ name: "Grace", branch: "CSE" }, { name: "Hank", branch: "CIVIL" }],
-    },
-  },
-  {
-    id: 2,
-    name: "Robotics Club",
-    image: "robotics.jpg",
-    description: "A club for robotics lovers to build and innovate.",
-    totalStudents: 90,
-    studentsByYear: {
-      E1: [{ name: "Ian", branch: "ECE" }],
-      E2: [{ name: "Jack", branch: "EEE" }],
-      E3: [{ name: "Karen", branch: "MECH" }],
-      E4: [{ name: "Leo", branch: "CIVIL" }],
-    },
-  },
-  {
-    id: 3,
-    name: "Cybersecurity Club",
-    image: "cybersecurity.jpeg",
-    description: "A club focused on ethical hacking and cybersecurity skills.",
-    totalStudents: 75,
-    studentsByYear: {
-      E1: [{ name: "Mike", branch: "CSE" }],
-      E2: [{ name: "Nancy", branch: "IT" }],
-      E3: [{ name: "Oscar", branch: "ECE" }],
-      E4: [{ name: "Paul", branch: "EEE" }],
-    },
-  },
-  {
-    id: 4,
-    name: "AI ML Club",
-    image: "ai_ml.jpeg",
-    description: "A club for coding enthusiasts to enhance their programming skills.",
-    totalStudents: 120,
-    studentsByYear: {
-      E1: [{ name: "Alice", branch: "CSE" }, { name: "Bob", branch: "IT" }],
-      E2: [{ name: "Charlie", branch: "ECE" }, { name: "David", branch: "EEE" }],
-      E3: [{ name: "Eve", branch: "CSE" }, { name: "Frank", branch: "MECH" }],
-      E4: [{ name: "Grace", branch: "CSE" }, { name: "Hank", branch: "CIVIL" }],
-    },
-  },
-];
+const API_URL = "http://localhost:3000/api/clubs"; // Update this with your backend URL
 
 function ClubPage() {
+  const [clubs, setClubs] = useState([]);
   const [selectedClub, setSelectedClub] = useState(null);
+
+  useEffect(() => {
+    // Fetch clubs data from backend
+    const fetchClubs = async () => {
+      try {
+        const response = await axios.get(`${API_URL}`);
+        setClubs(response.data);
+      } catch (error) {
+        console.error("Error fetching clubs:", error);
+      }
+    };
+
+    fetchClubs();
+  }, []);
 
   const handleCardClick = (club) => {
     setSelectedClub(club);
+  };
+
+  const handleJoinClub = async () => {
+    if (!selectedClub) return;
+    
+    try {
+      const response = await axios.post(`${API_URL}/join`, {
+        clubId: selectedClub._id,
+        name: "viki", 
+        email: "mmviki@example.com",
+        year: "E2",
+        branch: "CSE",
+      });
+
+      alert(response.data.message);
+
+      // 🔥 Update selected club with new data
+      setSelectedClub(response.data.club);
+
+      // 🔥 Update clubs list so UI refreshes properly
+      setClubs((prevClubs) =>
+        prevClubs.map((club) =>
+          club._id === selectedClub._id ? response.data.club : club
+        )
+      );
+    } catch (error) {
+      console.error("Error joining club:", error);
+      alert(error.response?.data?.message || "Failed to join club.");
+    }
   };
 
   return (
     <div className="container">
       <Sidebar />
       <h2 className="title">College Clubs</h2>
+
       <div className="club-list">
-        {clubsData.map((club) => (
-          <div
-            className={`club-card ${selectedClub && selectedClub.id === club.id ? "expanded" : ""}`}
-            key={club.id}
-            onClick={() => handleCardClick(club)}
-          >
-            <img src={club.image} alt={club.name} className="club-img" />
-            <div className="club-info">
-              <h3>{club.name}</h3>
-              <p>{club.description}</p>
-            </div>
-          </div>
-        ))}
+        {clubs.length > 0 ? (
+          clubs.map(
+            (club) =>
+              club && (
+                <div
+                  className={`club-card ${
+                    selectedClub && selectedClub._id === club._id ? "expanded" : ""
+                  }`}
+                  key={club._id}
+                  onClick={() => handleCardClick(club)}
+                >
+                  <img
+                    src={club.image || "default-image-url.jpg"}
+                    alt={club.name || "Club"}
+                    className="club-img"
+                  />
+                  <div className="club-info">
+                    <h3>{club.name || "Unnamed Club"}</h3>
+                    <p>{club.description || "No description available"}</p>
+                  </div>
+                </div>
+              )
+          )
+        ) : (
+          <p>Loading clubs...</p>
+        )}
       </div>
 
       {selectedClub && (
@@ -91,8 +97,8 @@ function ClubPage() {
             <h2>{selectedClub.name}</h2>
             <p><strong>Description:</strong> {selectedClub.description}</p>
             <p><strong>Total Students:</strong> {selectedClub.totalStudents}</p>
-            <p><strong>Students co-ordinators by Year:</strong></p>
-            {Object.keys(selectedClub.studentsByYear).map((year) => (
+            <p><strong>Students Coordinators by Year:</strong></p>
+            {Object.keys(selectedClub.studentsByYear || {}).map((year) => (
               <div key={year}>
                 <h4>{year}</h4>
                 <table className="students-table">
@@ -113,7 +119,7 @@ function ClubPage() {
                 </table>
               </div>
             ))}
-            <button className="join-btn" onClick={() => alert(`Joined ${selectedClub.name}`)}>Join Club</button>
+            <button className="join-btn" onClick={handleJoinClub}>Join Club</button>
           </div>
         </div>
       )}
