@@ -44,6 +44,15 @@ const alumniConnectSchema = new mongoose.Schema({
         }]
 })
 
+const internSchema = new mongoose.Schema({
+    type: { type: String, enum: ["job", "hackathon", "internship"], required: true },
+    title: { type: String, required: true },
+    companyOrOrganizer: { type: String, required: true },
+    location: { type: String },
+    description: { type: String }
+});
+
+const internModel = mongoose.model("Opportunity", internSchema);
 const aConnectModel = mongoose.model('alumni', alumniConnectSchema);
 const UserModel = mongoose.model('users', UserSchema);
 const PostModel = mongoose.model('posts', postSchema);
@@ -53,5 +62,6 @@ module.exports = {
     UserModel : UserModel,
     PostModel : PostModel,
     ClubModel : ClubModel,
-    aConnectModel: aConnectModel
+    aConnectModel: aConnectModel,
+    internModel : internModel
 };

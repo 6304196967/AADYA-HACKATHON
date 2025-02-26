@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "../../styles/schedule.css";
-import Sidebar from "../Components/adminsidebar";
+import Sidebar from "../Components/facultysidebar";
 
 const SchedulePage = () => {
   const [selectedOption, setSelectedOption] = useState(null);

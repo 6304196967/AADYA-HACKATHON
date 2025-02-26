@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "../../styles/adminintern.css"
-
+import "../../styles/adminintern.css";
+import Sidebar from "../Components/facultysidebar";
 const initialEvents = {
   jobs: [
     { id: 1, title: "Software Engineer Internship", company: "Google", status: "Upcoming" },
@@ -28,29 +28,68 @@ export default function AdminDashboard() {
     }));
   };
 
-  const handleAddEvent = () => {
-    if (!newEvent.title || !newEvent.url) return;
-    
-    setEvents(prevEvents => ({
-      ...prevEvents,
-      [newEvent.category]: [
-        ...prevEvents[newEvent.category],
-        {
-          id: Date.now(),
-          title: newEvent.title,
-          company: newEvent.company || "N/A",
-          status: "Upcoming",
-          url: newEvent.url
+  const typeMapping = {
+    jobs: "job",
+    hackathons: "hackathon",
+    internships: "internship", // ✅ Ensure this matches your schema
+};
+
+const handleAddEvent = async () => {
+    if (!newEvent.title || !newEvent.url) {
+        alert("Please fill all required fields.");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:3000/api/intern/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                type: typeMapping[newEvent.category], // ✅ Convert to valid schema type
+                title: newEvent.title,
+                companyOrOrganizer: newEvent.company || "N/A",
+                url: newEvent.url,
+            }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "Failed to add opportunity");
         }
-      ]
-    }));
-    
-    setNewEvent({ category: "jobs", title: "", company: "", url: "" });
-    setShowForm(false);
-  };
+
+        alert(data.message);
+
+        setEvents(prevEvents => ({
+            ...prevEvents,
+            [newEvent.category]: [
+                ...prevEvents[newEvent.category],
+                {
+                    id: data.newOpportunity._id,
+                    title: newEvent.title,
+                    company: newEvent.company || "N/A",
+                    status: "Upcoming",
+                    url: newEvent.url,
+                }
+            ]
+        }));
+
+        setNewEvent({ category: "jobs", title: "", company: "", url: "" });
+        setShowForm(false);
+    } catch (error) {
+        console.error("Error adding event:", error);
+        alert(error.message);
+    }
+};
+
+
+
 
   return (
     <div className="admin-container">
+        <Sidebar />
       <h1 className="admin-title">Opportunities Pannel</h1>
       
       <button className="create-button" onClick={() => setShowForm(!showForm)}>

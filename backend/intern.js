@@ -1,32 +1,43 @@
 const express = require("express");
-const {Opportunity} = require("./db");
+const { internModel } = require("./db");
 
 const internRouter = express.Router();
-internRouter.post("/add", async (req, res) => {
+app.post("/api/intern/add", async (req, res) => {
     try {
-        const { type, title, companyOrOrganizer, description } = req.body;
+        const { type, title, companyOrOrganizer, url } = req.body;
 
-        const newOpportunity = new Opportunity({
+        if (!type || !title || !url) {
+            return res.status(400).json({ error: "Missing required fields" });
+        }
+
+        const newOpportunity = new internModel({
             type,
             title,
             companyOrOrganizer,
-            description
+            location: "N/A", // Add default if missing
+            description: "No description available" // Default description
         });
 
         await newOpportunity.save();
-        res.status(201).json({ message: "Opportunity added successfully!", newOpportunity });
+
+        res.status(201).json({ message: "Event added successfully!", newOpportunity });
     } catch (error) {
-        res.status(500).json({ error: "Failed to add opportunity", details: error.message });
+        console.error("Error adding event:", error);
+        res.status(500).json({ error: "Failed to add event" });
     }
 });
 
+
 internRouter.get("/all", async (req, res) => {
     try {
-        const opportunities = await Opportunity.find();
+        const { type } = req.query;
+        const query = type ? { type } : {}; // Filter by type if provided
+        const opportunities = await internModel.find(query);
         res.status(200).json(opportunities);
     } catch (error) {
         res.status(500).json({ error: "Failed to fetch opportunities", details: error.message });
     }
 });
+
 
 module.exports = internRouter;

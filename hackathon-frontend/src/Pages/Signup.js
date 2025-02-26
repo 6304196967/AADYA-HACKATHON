@@ -145,7 +145,7 @@ function Signup() {
         </form>
         <p className="login-prompt">
           Already have an account?
-          <Link to="/" className="login-link">
+          <Link to="/login" className="login-link">
             Log in
           </Link>
         </p>
