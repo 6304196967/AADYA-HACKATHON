@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../../styles/ClubPage.css";
-import Sidebar from "../Components/alumnisidebar";
+import Sidebar from "../Components/csidebar";
 
 const ClubPage = () => {
   const [clubs, setClubs] = useState([]);

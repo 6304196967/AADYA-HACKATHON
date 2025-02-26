@@ -57,6 +57,28 @@ const internSchema = new mongoose.Schema({
     description: { type: String }
 });
 
+const ExamScheduleSchema = new mongoose.Schema({
+  year: String,
+  branch: String,
+  exams: [
+    {
+      subject: String,
+      date: String,
+      time: String,
+    },
+  ],
+});
+
+const TimeTableSchema = new mongoose.Schema({
+  day: String,
+  subject: String,
+  time: String,
+  faculty: String,
+});
+
+const ExamSchedule = mongoose.model("ExamSchedule", ExamScheduleSchema);
+const TimeTable = mongoose.model("TimeTable", TimeTableSchema);
+
 const internModel = mongoose.model("Opportunity", internSchema);
 const aConnectModel = mongoose.model('alumni', alumniConnectSchema);
 const UserModel = mongoose.model('users', UserSchema);
@@ -70,6 +92,8 @@ module.exports = {
     ClubModel : ClubModel,
     aConnectModel: aConnectModel,
     internModel : internModel,
-    schemaModel : schemaModel
+    schemaModel : schemaModel,
+    ExamSchedule : ExamSchedule,
+    TimeTable : TimeTable
 
 };

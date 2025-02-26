@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../../styles/schedule.css";
 import Sidebar from "../Components/facultysidebar";
 
@@ -6,50 +6,31 @@ const SchedulePage = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [year, setYear] = useState("");
   const [branch, setBranch] = useState("");
+  const [examSchedule, setExamSchedule] = useState({});
+  const [timeTable, setTimeTable] = useState([]);
 
-  // Exam schedule data for different years and branches
-  const EXAM_SCHEDULE = {
-    "1st": {
-      "CSE": [
-        { subject: "Math", date: "10-Mar-2025", time: "10:00 AM" },
-        { subject: "DLD", date: "12-Mar-2025", time: "2:00 PM" },
-        { subject: "P&S", date: "14-Mar-2025", time: "10:00 AM" },
-        { subject: "FLAT", date: "16-Mar-2025", time: "2:00 PM" },
-        { subject: "DBMS", date: "18-Mar-2025", time: "10:00 AM" },
-        { subject: "DSP", date: "20-Mar-2025", time: "2:00 PM" },
-        { subject: "CD", date: "22-Mar-2025", time: "10:00 AM" }
-      ],
-      "ECE": [
-        { subject: "Physics", date: "11-Mar-2025", time: "10:00 AM" },
-        { subject: "FLAT", date: "13-Mar-2025", time: "2:00 PM" },
-        { subject: "DSP", date: "15-Mar-2025", time: "10:00 AM" },
-        { subject: "DBMS", date: "17-Mar-2025", time: "2:00 PM" },
-        { subject: "P&S", date: "19-Mar-2025", time: "10:00 AM" },
-        { subject: "DLD", date: "21-Mar-2025", time: "2:00 PM" },
-        { subject: "CD", date: "23-Mar-2025", time: "10:00 AM" }
-      ]
-    }
-    // Add additional years/branches if needed
-  };
+  // Fetch Exam Schedule
+  useEffect(() => {
+    fetch("http://localhost:3000/api/schedule/exam-schedule")
+      .then((res) => res.json())
+      .then((data) => setExamSchedule(data))
+      .catch((err) => console.error("Error fetching exam schedule:", err));
+  }, []);
 
-  // Time table data (static example)
-  const TIME_TABLE_DATA = [
-    { day: "Monday", subject: "Math", time: "9:00 AM", faculty: "Prof. Sharma" },
-    { day: "Monday", subject: "Physics", time: "11:00 AM", faculty: "Dr. Singh" },
-    { day: "Tuesday", subject: "DBMS", time: "2:00 PM", faculty: "Prof. Rao" },
-    { day: "Wednesday", subject: "Thermodynamics", time: "10:30 AM", faculty: "Dr. Patel" },
-    { day: "Thursday", subject: "DLD", time: "12:00 PM", faculty: "Prof. Reddy" },
-    { day: "Friday", subject: "FLAT", time: "3:00 PM", faculty: "Dr. Kumar" },
-    { day: "Friday", subject: "P&S", time: "4:30 PM", faculty: "Prof. Verma" },
-    { day: "Friday", subject: "Robotics", time: "1:00 PM", faculty: "Dr. Mehta" }
-  ];
+  // Fetch Time Table
+  useEffect(() => {
+    fetch("http://localhost:3000/api/schedule/time-table")
+      .then((res) => res.json())
+      .then((data) => setTimeTable(data))
+      .catch((err) => console.error("Error fetching time table:", err));
+  }, []);
 
   return (
     <div className="schedule-container">
       <Sidebar />
       <div className="main-content">
         <h2 className="title">Schedule</h2>
-        
+
         {/* Selection Cards */}
         {!selectedOption && (
           <div className="selection-cards">
@@ -82,7 +63,7 @@ const SchedulePage = () => {
                 <option value="MECH">MECH</option>
               </select>
             </div>
-            {year && branch && EXAM_SCHEDULE[year] && EXAM_SCHEDULE[year][branch] ? (
+            {year && branch && examSchedule[year] && examSchedule[year][branch] ? (
               <table className="schedule-table">
                 <thead>
                   <tr>
@@ -92,7 +73,7 @@ const SchedulePage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {EXAM_SCHEDULE[year][branch].map((exam, index) => (
+                  {examSchedule[year][branch].map((exam, index) => (
                     <tr key={index}>
                       <td>{exam.subject}</td>
                       <td>{exam.date}</td>
@@ -121,7 +102,7 @@ const SchedulePage = () => {
                 </tr>
               </thead>
               <tbody>
-                {TIME_TABLE_DATA.map((item, index) => (
+                {timeTable.map((item, index) => (
                   <tr key={index}>
                     <td>{item.day}</td>
                     <td>{item.subject}</td>
