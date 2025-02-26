@@ -1,85 +1,115 @@
-import { useState, useEffect } from "react";
-import "./schedule.css";
-import Sidebar from "../Components/sidebar";
+import { useState } from "react";
+import "../../styles/schedule.css";
+import Sidebar from "../Components/adminsidebar";
 
 const SchedulePage = () => {
-    // Static Schedule Data
-    const SCHEDULE_DATA = [
-        { subject: "Math", time: "9:00 AM", faculty: "Prof. Sharma", year: "1st", branch: "CSE" },
-        { subject: "Physics", time: "11:00 AM", faculty: "Dr. Singh", year: "2nd", branch: "ECE" },
-        { subject: "DBMS", time: "2:00 PM", faculty: "Prof. Rao", year: "3rd", branch: "EEE" },
-        { subject: "Thermodynamics", time: "10:30 AM", faculty: "Dr. Patel", year: "4th", branch: "MECH" },
-        { subject: "DLD", time: "12:00 PM", faculty: "Prof. Reddy", year: "1st", branch: "CSE" },
-        { subject: "FLAT", time: "3:00 PM", faculty: "Dr. Kumar", year: "2nd", branch: "ECE" },
-        { subject: "P&S", time: "4:30 PM", faculty: "Prof. Verma", year: "3rd", branch: "EEE" },
-        { subject: "Robotics", time: "1:00 PM", faculty: "Dr. Mehta", year: "4th", branch: "MECH" }
-    ];
-
-    const [filteredSchedule, setFilteredSchedule] = useState(SCHEDULE_DATA);
+    const [selectedOption, setSelectedOption] = useState(null);
     const [year, setYear] = useState("");
     const [branch, setBranch] = useState("");
 
-    useEffect(() => {
-        let filtered = SCHEDULE_DATA;
-
-        if (year) filtered = filtered.filter(item => item.year === year);
-        if (branch) filtered = filtered.filter(item => item.branch === branch);
-
-        setFilteredSchedule(filtered);
-    }, [year, branch]);
+    const EXAM_SCHEDULE = {
+        "1st": {
+            "CSE": [
+                { subject: "Math", date: "10-Mar-2025", time: "10:00 AM" },
+                { subject: "DLD", date: "12-Mar-2025", time: "2:00 PM" },
+                { subject: "P&S", date: "14-Mar-2025", time: "10:00 AM" },
+                { subject: "FLAT", date: "16-Mar-2025", time: "2:00 PM" },
+                { subject: "DBMS", date: "18-Mar-2025", time: "10:00 AM" },
+                { subject: "DSP", date: "20-Mar-2025", time: "2:00 PM" },
+                { subject: "CD", date: "22-Mar-2025", time: "10:00 AM" }
+            ],
+            "ECE": [
+                { subject: "Physics", date: "11-Mar-2025", time: "10:00 AM" },
+                { subject: "FLAT", date: "13-Mar-2025", time: "2:00 PM" },
+                { subject: "DSP", date: "15-Mar-2025", time: "10:00 AM" },
+                { subject: "DBMS", date: "17-Mar-2025", time: "2:00 PM" },
+                { subject: "P&S", date: "19-Mar-2025", time: "10:00 AM" },
+                { subject: "DLD", date: "21-Mar-2025", time: "2:00 PM" },
+                { subject: "CD", date: "23-Mar-2025", time: "10:00 AM" }
+            ]
+        }
+    };
 
     return (
         <div className="schedule-container">
             <Sidebar />
             <div className="main-content">
-                <h2 className="title">Class Schedule</h2>
+                <h2 className="title">Schedule</h2>
+                
+                {/* Selection Cards */}
+                {!selectedOption ? (
+                    <div className="selection-cards">
+                        <div className="card" onClick={() => setSelectedOption("examCalendar")}>
+                            View Exam Calendar
+                        </div>
+                        <div className="card" onClick={() => setSelectedOption("timeTable")}>
+                            Time Table Schedule
+                        </div>
+                    </div>
+                ) : null}
 
-                <div className="filters">
-                    <select onChange={(e) => setYear(e.target.value)} value={year}>
-                        <option value="">Select Year</option>
-                        <option value="1st">1st Year</option>
-                        <option value="2nd">2nd Year</option>
-                        <option value="3rd">3rd Year</option>
-                        <option value="4th">4th Year</option>
-                    </select>
+                {/* Exam Calendar Section */}
+                {selectedOption === "examCalendar" && (
+                    <div className="exam-calendar">
+                        <h3>Exam Calendar</h3>
 
-                    <select onChange={(e) => setBranch(e.target.value)} value={branch}>
-                        <option value="">Select Branch</option>
-                        <option value="CSE">CSE</option>
-                        <option value="ECE">ECE</option>
-                        <option value="EEE">EEE</option>
-                        <option value="MECH">MECH</option>
-                    </select>
-                </div>
+                        <div className="filters">
+                            <select onChange={(e) => setYear(e.target.value)} value={year}>
+                                <option value="">Select Year</option>
+                                <option value="1st">1st Year</option>
+                                <option value="2nd">2nd Year</option>
+                                <option value="3rd">3rd Year</option>
+                                <option value="4th">4th Year</option>
+                            </select>
 
-                <table className="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>Subject</th>
-                            <th>Time</th>
-                            <th>Faculty</th>
-                            <th>Year</th>
-                            <th>Branch</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredSchedule.length > 0 ? (
-                            filteredSchedule.map((item, index) => (
-                                <tr key={index}>
-                                    <td>{item.subject}</td>
-                                    <td>{item.time}</td>
-                                    <td>{item.faculty}</td>
-                                    <td>{item.year}</td>
-                                    <td>{item.branch}</td>
-                                </tr>
-                            ))
+                            <select onChange={(e) => setBranch(e.target.value)} value={branch}>
+                                <option value="">Select Branch</option>
+                                <option value="CSE">CSE</option>
+                                <option value="ECE">ECE</option>
+                                <option value="EEE">EEE</option>
+                                <option value="MECH">MECH</option>
+                            </select>
+                        </div>
+
+                        {year && branch && EXAM_SCHEDULE[year] && EXAM_SCHEDULE[year][branch] ? (
+                            <table className="schedule-table">
+                                <thead>
+                                    <tr>
+                                        <th>Subject</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {EXAM_SCHEDULE[year][branch].map((exam, index) => (
+                                        <tr key={index}>
+                                            <td>{exam.subject}</td>
+                                            <td>{exam.date}</td>
+                                            <td>{exam.time}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         ) : (
-                            <tr>
-                                <td colSpan="5" className="no-data">No schedule found</td>
-                            </tr>
+                            <p className="no-data">Please select a valid year and branch.</p>
                         )}
-                    </tbody>
-                </table>
+                    </div>
+                )}
+
+                {/* Time Table Schedule Section */}
+                {selectedOption === "timeTable" && (
+                    <div className="time-table">
+                        <h3>Time Table Schedule</h3>
+                        <p>Details about the class time table will be displayed here.</p>
+                    </div>
+                )}
+
+                {/* Back Button */}
+                {selectedOption && (
+                    <button className="back-button" onClick={() => setSelectedOption(null)}>
+                        Back
+                    </button>
+                )}
             </div>
         </div>
     );

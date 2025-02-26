@@ -1,7 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import '../../styles/dashboard.css'
-import Sidebar from '../Components/sidebar';
+import Sidebar from '../Components/adminsidebar';
 function App() {
+  useEffect(() => {
+    // Configure chatbot
+    window.chtlConfig = { chatbotId: "9648262883" };
+
+    // Create script element
+    const script = document.createElement("script");
+    script.src = "https://chatling.ai/js/embed.js";
+    script.async = true;
+    script.dataset.id = "9648262883";
+    script.id = "chatling-embed-script";
+
+    document.body.appendChild(script);
+
+    return () => {
+      // Cleanup if needed
+      document.body.removeChild(script);
+    };
+  }, []);
   const [notifications, setNotifications] = useState([
     {
       id: 1,
@@ -84,6 +102,7 @@ function App() {
 
     return (
       <div className="notifications-section">
+        
         <div className="notifications-header">
           <h2>Notifications</h2>
           <button className="mark-all-btn" onClick={markAllAsRead}>

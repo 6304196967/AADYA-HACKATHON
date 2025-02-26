@@ -3,12 +3,14 @@ const mongoose = require('mongoose');
 const UserRouter = require('./login');
 const cors = require("cors");
 const adminRouter = require('./admin');
+const { ClubModel } = require('./db');
 
 const app = express();
 app.use(express.json());  
 app.use(cors());
 app.use("/api/user", UserRouter);  
 app.use("/api/admin", adminRouter);
+app.use("/api/clubs", ClubModel);
 
 async function main() {
     try {

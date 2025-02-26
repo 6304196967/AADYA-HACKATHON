@@ -24,9 +24,21 @@ const postSchema = new mongoose.Schema({
     replies: [ReplySchema] // ✅ Make sure replies is an array
 });
 
+const clubSchema = new mongoose.Schema({
+  name: String,
+  image: String,
+  description: String,
+  totalStudents: Number,
+  studentsByYear: Object,
+  members: [{ name: String, email: String, year: String, branch: String }],
+});
+
 const UserModel = mongoose.model('users', UserSchema);
 const PostModel = mongoose.model('posts', postSchema);
+const ClubModel = mongoose.model('clubs', clubSchema);
+
 module.exports = {
     UserModel : UserModel,
-    PostModel : PostModel
+    PostModel : PostModel,
+    ClubModel : ClubModel
 };

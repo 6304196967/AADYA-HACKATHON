@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../../styles/ClubPage.css";
+import Sidebar from "../Components/adminsidebar";
 
 const clubsData = [
   {
@@ -65,6 +66,7 @@ function ClubPage() {
 
   return (
     <div className="container">
+      <Sidebar />
       <h2 className="title">College Clubs</h2>
       <div className="club-list">
         {clubsData.map((club) => (

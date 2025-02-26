@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../styles/discussion.css';
+import Sidebar from '../Components/adminsidebar';
 
 const API_URL = "http://localhost:3000/api/admin/posts"; 
 
@@ -77,6 +78,7 @@ function Discussion() {
 
   return (
     <div className="App">
+      <Sidebar />
       <div className="post-form-container">
         <h2>Start a New Discussion</h2>
         <form onSubmit={handleSubmit} className="post-form">
