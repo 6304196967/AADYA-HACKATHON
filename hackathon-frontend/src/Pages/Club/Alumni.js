@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "../../styles/Alumni.css";
-import Sidebar from "../Components/studentsidebar";
+import Sidebar from "../Components/csidebar";
 
 const alumniData = [
   {
