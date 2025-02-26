@@ -25,12 +25,17 @@ const postSchema = new mongoose.Schema({
 });
 
 const clubSchema = new mongoose.Schema({
-  name: String,
-  image: String,
-  description: String,
-  totalStudents: Number,
-  studentsByYear: Object,
-  members: [{ name: String, email: String, year: String, branch: String }],
+    name: { type: String, required: true },
+    image: { type: String, required: true }, 
+    description: { type: String, required: true },
+    totalStudents: { type: Number, default: 0 }, // Since frontend sends totalMembers, we map it to this
+    studentsByYear: { type: Object, default: {} },
+    members: { type: Array, default: [] } // Default empty array to avoid null issues
+  });
+
+const SchedulSchema = new mongoose.Schema({
+    year : String,
+    branch : String
 });
 
 const alumniConnectSchema = new mongoose.Schema({
@@ -39,7 +44,7 @@ const alumniConnectSchema = new mongoose.Schema({
     replies: [
         {
           text: String,
-          respondedBy: String, // Alumni name or ID
+          respondedBy: String, 
           date: { type: Date, default: Date.now }
         }]
 })
@@ -57,11 +62,14 @@ const aConnectModel = mongoose.model('alumni', alumniConnectSchema);
 const UserModel = mongoose.model('users', UserSchema);
 const PostModel = mongoose.model('posts', postSchema);
 const ClubModel = mongoose.model('clubs', clubSchema);
+const schemaModel = mongoose.model('schedule', SchedulSchema);
 
 module.exports = {
     UserModel : UserModel,
     PostModel : PostModel,
     ClubModel : ClubModel,
     aConnectModel: aConnectModel,
-    internModel : internModel
+    internModel : internModel,
+    schemaModel : schemaModel
+
 };

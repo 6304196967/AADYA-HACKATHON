@@ -1,68 +1,67 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/ClubPage.css";
 import Sidebar from "../Components/studentsidebar";
 
-const clubsData = [
-  {
-    id: 1,
-    name: "Coding Club",
-    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    description: "A club for coding enthusiasts to enhance their programming skills.",
-    totalStudents: 120,
-    studentsByYear: {
-      E1: [{ name: "Alice", branch: "CSE" }, { name: "Bob", branch: "IT" }],
-      E2: [{ name: "Charlie", branch: "ECE" }, { name: "David", branch: "EEE" }],
-      E3: [{ name: "Eve", branch: "CSE" }, { name: "Frank", branch: "MECH" }],
-      E4: [{ name: "Grace", branch: "CSE" }, { name: "Hank", branch: "CIVIL" }],
-    },
-  },
-  {
-    id: 2,
-    name: "Robotics Club",
-    image: "https://media.istockphoto.com/id/1287582736/photo/robot-humanoid-use-laptop-and-sit-at-table-for-big-data-analytic.jpg?s=1024x1024&w=is&k=20&c=NfRIbklwwZy8kKnOWgYrMI4yCrqNma-xp-RnMBLJ6ko=",
-    description: "A club for robotics lovers to build and innovate.",
-    totalStudents: 90,
-    studentsByYear: {
-      E1: [{ name: "Ian", branch: "ECE" }],
-      E2: [{ name: "Jack", branch: "EEE" }],
-      E3: [{ name: "Karen", branch: "MECH" }],
-      E4: [{ name: "Leo", branch: "CIVIL" }],
-    },
-  },
-  {
-    id: 3,
-    name: "Cybersecurity Club",
-    image: "https://media.istockphoto.com/id/1777088857/photo/digital-security-concept.jpg?s=1024x1024&w=is&k=20&c=Ddw_NWLAGc5lMWTBfyYa5fKneY4pBmtFU-QD5CJ3uY8=",
-    description: "A club focused on ethical hacking and cybersecurity skills.",
-    totalStudents: 75,
-    studentsByYear: {
-      E1: [{ name: "Mike", branch: "CSE" }],
-      E2: [{ name: "Nancy", branch: "IT" }],
-      E3: [{ name: "Oscar", branch: "ECE" }],
-      E4: [{ name: "Paul", branch: "EEE" }],
-    },
-  },
-  {
-    id: 4,
-    name: "AI ML Club",
-    image: "https://media.istockphoto.com/id/1976099664/photo/artificial-intelligence-processor-concept-ai-big-data-array.jpg?s=1024x1024&w=is&k=20&c=dPwo-_Pp_00e1D4iIQz3hEXqsaT409ZiSePfytWYIxI=",
-    description: "A club for coding enthusiasts to enhance their programming skills.",
-    totalStudents: 120,
-    studentsByYear: {
-      E1: [{ name: "Alice", branch: "CSE" }, { name: "Bob", branch: "IT" }],
-      E2: [{ name: "Charlie", branch: "ECE" }, { name: "David", branch: "EEE" }],
-      E3: [{ name: "Eve", branch: "CSE" }, { name: "Frank", branch: "MECH" }],
-      E4: [{ name: "Grace", branch: "CSE" }, { name: "Hank", branch: "CIVIL" }],
-    },
-  },
-];
+const API_URL = "http://localhost:3000/api/clubs/all"; // Replace with actual API URL
 
 function ClubPage() {
+  const [clubsData, setClubsData] = useState([]);
   const [selectedClub, setSelectedClub] = useState(null);
+  const [joinedClubs, setJoinedClubs] = useState(new Set(JSON.parse(localStorage.getItem("joinedClubs")) || []));
+
+  // Fetch clubs data from API
+  useEffect(() => {
+    fetch(API_URL)
+      .then((response) => response.json())
+      .then((data) => setClubsData(data))
+      .catch((error) => console.error("Error fetching clubs:", error));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("joinedClubs", JSON.stringify(Array.from(joinedClubs)));
+  }, [joinedClubs]);
 
   const handleCardClick = (club) => {
     setSelectedClub(club);
   };
+
+  const handleJoinClub = async (clubId) => {
+    console.log("clubId:", clubId); // Debugging: Ensure this is printed correctly
+  
+    // Get userName from localStorage
+    const userName = localStorage.getItem("username")?.trim();
+  
+    // Hardcoded values for userBranch and userYear
+    const userBranch = "CSE";  
+    const userYear = "E2";     
+  
+    // Validate required fields
+    if (!clubId || !userName) {
+      alert("All fields are required!");
+      return;
+    }
+  
+    try {
+      const response = await fetch("http://localhost:3000/api/clubs/join", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clubId, userName, userBranch, userYear }),
+      });
+  
+      const data = await response.json();
+      console.log("Response:", data); // Debugging: Check API response
+      if (response.ok) {
+        alert("Joined Successfully!");
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error("Error joining club:", error);
+    }
+  };
+  
+  
+  
 
   return (
     <div className="container">
@@ -71,14 +70,24 @@ function ClubPage() {
       <div className="club-list">
         {clubsData.map((club) => (
           <div
-            className={`club-card ${selectedClub && selectedClub.id === club.id ? "expanded" : ""}`}
-            key={club.id}
+            className={`club-card ${selectedClub && selectedClub.id === club._id ? "expanded" : ""}`}
+            key={club._id}
             onClick={() => handleCardClick(club)}
           >
             <img src={club.image} alt={club.name} className="club-img" />
             <div className="club-info">
               <h3>{club.name}</h3>
               <p>{club.description}</p>
+              <button
+                className="join-btn"
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent modal from opening
+                  handleJoinClub(club._id);
+                }}
+                disabled={joinedClubs.has(club._id)}
+              >
+                {joinedClubs.has(club._id) ? "Joined" : "Join Club"}
+              </button>
             </div>
           </div>
         ))}
@@ -92,7 +101,7 @@ function ClubPage() {
             <p><strong>Description:</strong> {selectedClub.description}</p>
             <p><strong>Total Students:</strong> {selectedClub.totalStudents}</p>
             <p><strong>Students co-ordinators by Year:</strong></p>
-            {Object.keys(selectedClub.studentsByYear).map((year) => (
+            {Object.keys(selectedClub.studentsByYear || {}).map((year) => (
               <div key={year}>
                 <h4>{year}</h4>
                 <table className="students-table">
@@ -113,7 +122,13 @@ function ClubPage() {
                 </table>
               </div>
             ))}
-            <button className="join-btn" onClick={() => alert(`Joined ${selectedClub.name}`)}>Join Club</button>
+            <button
+              className="join-btn"
+              onClick={() => handleJoinClub(selectedClub.id)}
+              disabled={joinedClubs.has(selectedClub.id)}
+            >
+              {joinedClubs.has(selectedClub.id) ? "Joined" : "Join Club"}
+            </button>
           </div>
         </div>
       )}
