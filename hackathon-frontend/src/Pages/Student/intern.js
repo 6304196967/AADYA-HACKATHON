@@ -16,20 +16,29 @@ const InternPortal = () => {
     const fetchData = async () => {
         try {
             const [jobsRes, hackathonsRes] = await Promise.all([
-                fetch("http://localhost:3000/api/intern/all?type=job").then((res) => res.json()).catch(() => defaultJobs),
-                fetch("http://localhost:3000/api/intern/all?type=hackathon").then((res) => res.json()).catch(() => defaultHackathons),
+                fetch("http://localhost:3000/api/intern/all?type=job").then((res) => res.json()),
+                fetch("http://localhost:3000/api/intern/all?type=hackathon").then((res) => res.json()),
             ]);
-
-            setJobs(jobsRes);
-            setHackathons(hackathonsRes);
+    
+            console.log("Jobs API Response:", jobsRes);  // Debugging
+            console.log("Hackathons API Response:", hackathonsRes); // Debugging
+    
+            setJobs(Array.isArray(jobsRes) ? jobsRes : []);
+            setHackathons(Array.isArray(hackathonsRes) ? hackathonsRes : []);
         } catch (error) {
             console.error("Error fetching data:", error);
         }
     };
+    
 
-    const handleApply = async (id) => {
-        alert(`Application submitted for Job ID: ${id}`);
+    const handleApply = (url) => {
+        if (url) {
+            window.open(url, "_blank"); // Opens the URL in a new tab
+        } else {
+            alert("No application link available.");
+        }
     };
+    
 
     const handleJoin = async (id) => {
         alert(`Request sent for Hackathon ID: ${id}`);

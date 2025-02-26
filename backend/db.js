@@ -44,14 +44,15 @@ const alumniConnectSchema = new mongoose.Schema({
         }]
 })
 
-const opportunitySchema = new mongoose.Schema({
-    type: { type: String, enum: ["job", "hackathon"], required: true }, // Dropdown selection
-    title: { type: String, required: true }, 
-    companyOrOrganizer: { type: String, required: true }, // Company for jobs, Organizer for hackathons
-    description: { type: String, required: true }
+const internSchema = new mongoose.Schema({
+    type: { type: String, enum: ["job", "hackathon", "internship"], required: true },
+    title: { type: String, required: true },
+    companyOrOrganizer: { type: String, required: true },
+    location: { type: String },
+    description: { type: String }
 });
 
-const Opportunity = mongoose.model("Opportunity", opportunitySchema);
+const internModel = mongoose.model("Opportunity", internSchema);
 const aConnectModel = mongoose.model('alumni', alumniConnectSchema);
 const UserModel = mongoose.model('users', UserSchema);
 const PostModel = mongoose.model('posts', postSchema);
@@ -62,5 +63,5 @@ module.exports = {
     PostModel : PostModel,
     ClubModel : ClubModel,
     aConnectModel: aConnectModel,
-    Opportunity : Opportunity
+    internModel : internModel
 };
