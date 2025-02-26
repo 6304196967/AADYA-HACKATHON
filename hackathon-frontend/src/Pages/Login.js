@@ -20,11 +20,10 @@ import { useState } from "react";
     
             if (response.ok) {
                 localStorage.setItem("token", data.token);
-                localStorage.setItem("role", data.role); // Store role in local storage
+                localStorage.setItem("role", data.role); 
     
                 alert("Login successful");
     
-                // Navigate based on user role
                 if (data.role === "Admin") {
                     navigate("/admin/dashboard");
                 } else if (data.role === "Faculty") {
