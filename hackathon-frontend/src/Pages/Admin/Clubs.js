@@ -41,10 +41,8 @@ function ClubPage() {
 
       alert(response.data.message);
 
-      // 🔥 Update selected club with new data
       setSelectedClub(response.data.club);
 
-      // 🔥 Update clubs list so UI refreshes properly
       setClubs((prevClubs) =>
         prevClubs.map((club) =>
           club._id === selectedClub._id ? response.data.club : club
