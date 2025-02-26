@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import "../../styles/ClubPage.css";
 import Sidebar from "../Components/csidebar";
 
+
 const clubsData = [
   {
     id: 1,
     name: "Coding Club",
-    image: "coding.jpeg",
+    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     description: "A club for coding enthusiasts to enhance their programming skills.",
     totalStudents: 120,
     studentsByYear: {
@@ -19,7 +20,7 @@ const clubsData = [
   {
     id: 2,
     name: "Robotics Club",
-    image: "robotics.jpg",
+    image: "https://media.istockphoto.com/id/1287582736/photo/robot-humanoid-use-laptop-and-sit-at-table-for-big-data-analytic.jpg?s=1024x1024&w=is&k=20&c=NfRIbklwwZy8kKnOWgYrMI4yCrqNma-xp-RnMBLJ6ko=",
     description: "A club for robotics lovers to build and innovate.",
     totalStudents: 90,
     studentsByYear: {
@@ -32,7 +33,7 @@ const clubsData = [
   {
     id: 3,
     name: "Cybersecurity Club",
-    image: "cybersecurity.jpeg",
+    image: "https://media.istockphoto.com/id/1777088857/photo/digital-security-concept.jpg?s=1024x1024&w=is&k=20&c=Ddw_NWLAGc5lMWTBfyYa5fKneY4pBmtFU-QD5CJ3uY8=",
     description: "A club focused on ethical hacking and cybersecurity skills.",
     totalStudents: 75,
     studentsByYear: {
@@ -45,7 +46,7 @@ const clubsData = [
   {
     id: 4,
     name: "AI ML Club",
-    image: "ai_ml.jpeg",
+    image: "https://media.istockphoto.com/id/1976099664/photo/artificial-intelligence-processor-concept-ai-big-data-array.jpg?s=1024x1024&w=is&k=20&c=dPwo-_Pp_00e1D4iIQz3hEXqsaT409ZiSePfytWYIxI=",
     description: "A club for coding enthusiasts to enhance their programming skills.",
     totalStudents: 120,
     studentsByYear: {

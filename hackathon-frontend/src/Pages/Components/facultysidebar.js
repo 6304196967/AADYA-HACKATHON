@@ -29,6 +29,9 @@ const Sidebar = () => {
         <NavLink to="/faculty/alumni" className="sidebar-link">
           <GraduationCap className="icon" /> Alumni
         </NavLink>
+        <NavLink to="/faculty/postintern" className="sidebar-link">
+          <GraduationCap className="icon" /> PostIntern
+        </NavLink>
       </nav>
       <button className="logout-button" onClick={handleLogout}>
         Logout

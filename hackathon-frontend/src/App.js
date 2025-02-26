@@ -17,6 +17,7 @@ import Fschedule from "./Pages/Faculty/schedule";
 import Fclubs from "./Pages/Faculty/Clubs";
 import Fdiscussions from "./Pages/Faculty/Discussions";
 import Falumni from "./Pages/Faculty/Alumni";
+import Fintern from "./Pages/Faculty/intern";
 
 import SDashboard from "./Pages/Student/Dashboard";
 import Sschedule from "./Pages/Student/schedule";
@@ -62,6 +63,7 @@ function App() {
         <Route path="/faculty/clubs" element={<Fclubs />} />
         <Route path="/faculty/discussions" element={<Fdiscussions />} />
         <Route path="/faculty/alumni" element={<Falumni />} />  
+        <Route path="/faculty/postintern" element={<Fintern />} />  
        
         <Route path="/student" element={< SDashboard/>} />
         <Route path="/student/dashboard" element={<SDashboard />} />
