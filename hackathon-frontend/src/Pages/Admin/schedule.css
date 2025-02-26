@@ -1,0 +1,57 @@
+.schedule-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.title {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.filters select {
+    padding: 8px;
+    font-size: 1rem;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+}
+
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.schedule-table th, .schedule-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.schedule-table th {
+    background: #007bff;
+    color: white;
+}
+
+.schedule-table tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.no-data {
+    text-align: center;
+    padding: 10px;
+    color: #ff0000;
+}
