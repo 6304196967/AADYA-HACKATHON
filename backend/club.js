@@ -21,11 +21,11 @@ clubRouter.post("/join", async (req, res) => {
       const club = await ClubModel.findById(clubId);
       if (!club) return res.status(404).json({ message: "Club not found" });
   
-      // Check if the user is already a member
+      
       const isMember = club.members.some((member) => member.email === email);
       if (isMember) return res.status(400).json({ message: "Already a member" });
   
-      // Add new member and increment student count
+
       const updatedClub = await ClubModel.findByIdAndUpdate(
         clubId,
         { 

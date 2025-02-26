@@ -33,8 +33,8 @@ function ClubPage() {
     try {
       const response = await axios.post(`${API_URL}/join`, {
         clubId: selectedClub._id,
-        name: "viki", 
-        email: "mmviki@example.com",
+        name: localStorage.getItem("username"), 
+        email: localStorage.getItem("email"),
         year: "E2",
         branch: "CSE",
       });

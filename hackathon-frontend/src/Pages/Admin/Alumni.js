@@ -68,6 +68,7 @@ const jobsData = [
 export default function AlumniConnect() {
   const [view, setView] = useState("home");
   const [searchQuery, setSearchQuery] = useState("");
+  const [registeredEvents, setRegisteredEvents] = useState({});
 
   const filteredAlumni = alumniData.filter(
     (alumni) =>
@@ -76,9 +77,13 @@ export default function AlumniConnect() {
       alumni.company.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const handleRegister = (eventId) => {
+    setRegisteredEvents((prev) => ({ ...prev, [eventId]: true }));
+  };
+
   return (
     <div className="container">
-        <Sidebar />
+      <Sidebar />
       <h1 className="title">Alumni Connect</h1>
       <p className="subtitle">Bridge the gap between academia and industry</p>
 
@@ -113,9 +118,7 @@ export default function AlumniConnect() {
               <div key={alumni.id} className="alumni-card">
                 <img src={alumni.image} alt={alumni.name} className="alumni-image" />
                 <h3>{alumni.name}</h3>
-                <p>
-                  {alumni.profession} at {alumni.company}
-                </p>
+                <p>{alumni.profession} at {alumni.company}</p>
                 <p>📍 {alumni.location}</p>
                 <button className="connect-button">💬 Connect</button>
               </div>
@@ -133,12 +136,16 @@ export default function AlumniConnect() {
             {eventsData.map((event) => (
               <div key={event.id} className="event-card">
                 <h3>{event.title}</h3>
-                <p>
-                  📅 {event.date} | 🕒 {event.time}
-                </p>
+                <p>📅 {event.date} | 🕒 {event.time}</p>
                 <p>🎤 Speaker: {event.speaker}</p>
                 <p>{event.description}</p>
-                <button className="register-button">Register</button>
+                <button
+                  className="register-button"
+                  onClick={() => handleRegister(event.id)}
+                  disabled={registeredEvents[event.id]}
+                >
+                  {registeredEvents[event.id] ? "Registered ✅" : "Register"}
+                </button>
               </div>
             ))}
           </div>
