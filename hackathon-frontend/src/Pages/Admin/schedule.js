@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./schedule.css";
+import Sidebar from "../Components/sidebar";
 
 const SchedulePage = () => {
     // Static Schedule Data
@@ -14,7 +15,6 @@ const SchedulePage = () => {
         { subject: "Robotics", time: "1:00 PM", faculty: "Dr. Mehta", year: "4th", branch: "MECH" }
     ];
 
-    const [schedule, setSchedule] = useState(SCHEDULE_DATA);
     const [filteredSchedule, setFilteredSchedule] = useState(SCHEDULE_DATA);
     const [year, setYear] = useState("");
     const [branch, setBranch] = useState("");
@@ -30,54 +30,57 @@ const SchedulePage = () => {
 
     return (
         <div className="schedule-container">
-            <h2 className="title">Class Schedule</h2>
+            <Sidebar />
+            <div className="main-content">
+                <h2 className="title">Class Schedule</h2>
 
-            <div className="filters">
-                <select onChange={(e) => setYear(e.target.value)} value={year}>
-                    <option value="">Select Year</option>
-                    <option value="1st">1st Year</option>
-                    <option value="2nd">2nd Year</option>
-                    <option value="3rd">3rd Year</option>
-                    <option value="4th">4th Year</option>
-                </select>
+                <div className="filters">
+                    <select onChange={(e) => setYear(e.target.value)} value={year}>
+                        <option value="">Select Year</option>
+                        <option value="1st">1st Year</option>
+                        <option value="2nd">2nd Year</option>
+                        <option value="3rd">3rd Year</option>
+                        <option value="4th">4th Year</option>
+                    </select>
 
-                <select onChange={(e) => setBranch(e.target.value)} value={branch}>
-                    <option value="">Select Branch</option>
-                    <option value="CSE">CSE</option>
-                    <option value="ECE">ECE</option>
-                    <option value="EEE">EEE</option>
-                    <option value="MECH">MECH</option>
-                </select>
-            </div>
+                    <select onChange={(e) => setBranch(e.target.value)} value={branch}>
+                        <option value="">Select Branch</option>
+                        <option value="CSE">CSE</option>
+                        <option value="ECE">ECE</option>
+                        <option value="EEE">EEE</option>
+                        <option value="MECH">MECH</option>
+                    </select>
+                </div>
 
-            <table className="schedule-table">
-                <thead>
-                    <tr>
-                        <th>Subject</th>
-                        <th>Time</th>
-                        <th>Faculty</th>
-                        <th>Year</th>
-                        <th>Branch</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {filteredSchedule.length > 0 ? (
-                        filteredSchedule.map((item, index) => (
-                            <tr key={index}>
-                                <td>{item.subject}</td>
-                                <td>{item.time}</td>
-                                <td>{item.faculty}</td>
-                                <td>{item.year}</td>
-                                <td>{item.branch}</td>
-                            </tr>
-                        ))
-                    ) : (
+                <table className="schedule-table">
+                    <thead>
                         <tr>
-                            <td colSpan="5" className="no-data">No schedule found</td>
+                            <th>Subject</th>
+                            <th>Time</th>
+                            <th>Faculty</th>
+                            <th>Year</th>
+                            <th>Branch</th>
                         </tr>
-                    )}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {filteredSchedule.length > 0 ? (
+                            filteredSchedule.map((item, index) => (
+                                <tr key={index}>
+                                    <td>{item.subject}</td>
+                                    <td>{item.time}</td>
+                                    <td>{item.faculty}</td>
+                                    <td>{item.year}</td>
+                                    <td>{item.branch}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="5" className="no-data">No schedule found</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };
