@@ -22,7 +22,7 @@ function App() {
         <Route path="/admin/discussions" element={<Adiscussions />} />
         <Route path="/admin/alumni" element={<Aalumni />} />       
 
-     
+      
       </Routes>
     </Router>
   );
