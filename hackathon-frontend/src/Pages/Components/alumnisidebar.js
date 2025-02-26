@@ -27,7 +27,7 @@ const Sidebar = () => {
           <MessageSquare className="icon" /> Discussions
         </NavLink>
         <NavLink to="/allumni/alumni" className="sidebar-link">
-          <GraduationCap className="icon" /> Alumni
+          <GraduationCap className="icon" /> Messages
         </NavLink>
       </nav>
       <button className="logout-button" onClick={handleLogout}>

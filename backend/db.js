@@ -33,6 +33,18 @@ const clubSchema = new mongoose.Schema({
   members: [{ name: String, email: String, year: String, branch: String }],
 });
 
+const alumniConnectSchema = new mongoose.Schema({
+    title : String,
+    description: String,
+    replies: [
+        {
+          text: String,
+          respondedBy: String, // Alumni name or ID
+          date: { type: Date, default: Date.now }
+        }]
+})
+
+const aConnectModel = mongoose.model('alumni', alumniConnectSchema);
 const UserModel = mongoose.model('users', UserSchema);
 const PostModel = mongoose.model('posts', postSchema);
 const ClubModel = mongoose.model('clubs', clubSchema);
@@ -40,5 +52,6 @@ const ClubModel = mongoose.model('clubs', clubSchema);
 module.exports = {
     UserModel : UserModel,
     PostModel : PostModel,
-    ClubModel : ClubModel
+    ClubModel : ClubModel,
+    aConnectModel: aConnectModel
 };
