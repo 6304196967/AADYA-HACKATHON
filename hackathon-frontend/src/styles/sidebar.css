@@ -56,52 +56,6 @@
 }
 
 .icon {
-    width: 24px;
-    height: 24px;
-}
-
-/* Mobile Responsive Sidebar */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 70px;
-        padding: 10px;
-        align-items: center;
-    }
-
-    .sidebar-title {
-        display: none;
-    }
-
-    .sidebar-nav {
-        align-items: center;
-    }
-
-    .sidebar-link {
-        justify-content: center;
-        padding: 12px;
-        gap: 0;
-        position: relative;
-    }
-
-    .sidebar-link span {
-        display: none;
-    }
-
-    .sidebar-link:hover::after {
-        content: attr(title);
-        position: absolute;
-        left: 60px;
-        background: rgba(0, 0, 0, 0.8);
-        color: white;
-        padding: 6px 12px;
-        border-radius: 6px;
-        font-size: 0.9rem;
-        white-space: nowrap;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    }
-
-    .icon {
-        width: 26px;
-        height: 26px;
-    }
+    width: 20px;
+    height: 20px;
 }
