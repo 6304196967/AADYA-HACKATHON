@@ -12,7 +12,7 @@ const Sidebar = () => {
 
   return (
     <div className="sidebar">
-      <h2 className="sidebar-title">Portal</h2>
+      <h2 className="sidebar-title">Club Portal</h2>
       <nav className="sidebar-nav">
         <NavLink to="/clubc/dashboard" className="sidebar-link">
           <Home className="icon" /> Dashboard
