@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './homepage.css';
+import Sidebar from './Components/sidebar';
 
 const HomePage = () => {
   return (
     <div className="homepage-container">
+      <Sidebar />
       {/* Header with Login/Sign Up buttons */}
       <header className="homepage-header">
         <div className="header-buttons">
