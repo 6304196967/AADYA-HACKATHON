@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import "../../styles/dashboard.css";
-import Sidebar from "../Components/adminsidebar";
+import React, { useState, useEffect } from 'react';
+import './Dashboard.css';
+import Sidebar from '../Components/adminsidebar';
 
 function App() {
   const [notifications, setNotifications] = useState([]);
@@ -34,124 +34,114 @@ function App() {
     document.body.appendChild(script);
 
     return () => {
-      // Cleanup if needed
       document.body.removeChild(script);
     };
   }, []);
 
-  const markAsRead = (id) => {
-    setNotifications(notifications.map(notification => 
-      notification.id === id ? { ...notification, read: true } : notification
-    ));
+  const adminName = "Admin"; // Fetch dynamically if needed
+  const [newNotification, setNewNotification] = useState("");
+
+  const sendNotification = () => {
+    if (newNotification.trim() === "") return;
+
+    setNotifications((prev) => [
+      ...prev,
+      {
+        id: prev.length + 1,
+        type: 'message',
+        title: newNotification,
+        time: 'Just now',
+        read: false,
+      },
+    ]);
+
+    setNewNotification(""); // Reset input field
   };
 
-  const markAllAsRead = () => {
-    setNotifications(notifications.map(notification => ({ ...notification, read: true })));
-  };
-
-  const WelcomeSection = () => {
-    const currentTime = new Date();
-    const hours = currentTime.getHours();
-    
-    let greeting;
-    if (hours < 12) {
-      greeting = "Good Morning";
-    } else if (hours < 18) {
-      greeting = "Good Afternoon";
-    } else {
-      greeting = "Good Evening";
-    }
-
-    return (
-      <div className="welcome-section">
-        <div className="welcome-content">
-          <h1>{greeting}, {localStorage.getItem("username")}</h1>
-          <p>Welcome to your dashboard. Here's your overview for today.</p>
-        </div>
-        <div className="welcome-image">
-          <div className="image-placeholder"></div>
-        </div>
-      </div>
-    );
-  };
-
-  const NotificationsSection = () => {
-    const getIcon = (type) => {
-      switch (type) {
-        case "message":
-          return "💬";
-        case "alert":
-          return "⚠️";
-        case "task":
-          return "📝";
-        default:
-          return "🔔";
-      }
-    };
-
-    return (
-      <div className="notifications-section">
-        <div className="notifications-header">
-          <h2>Notifications</h2>
-          <button className="mark-all-btn" onClick={markAllAsRead}>
-            Mark all as read
-          </button>
-        </div>
-
-        <div className="notifications-list">
-          {notifications.length === 0 ? (
-            <div className="no-notifications">You have no notifications</div>
-          ) : (
-            notifications.map((notification) => (
-              <div
-                key={notification.id}
-                className={`notification-item ${notification.read ? "read" : "unread"}`}
-                onClick={() => markAsRead(notification.id)}
-              >
-                <div className="notification-icon">{getIcon(notification.type)}</div>
-                <div className="notification-content">
-                  <div className="notification-title">{notification.title}</div>
-                  <div className="notification-time">{notification.time}</div>
-                </div>
-                {!notification.read && <div className="unread-indicator"></div>}
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  const Dashboard = () => {
-    return (
-      <div className="dashboard-content">
-        <header className="dashboard-header">
-          <div className="search-bar">
-            {/* <input type="text" placeholder="Search..." /> */}
-          </div>
-          <div className="header-actions">
-            {/* <button className="notification-btn">
-              <span className="notification-count">
-                {notifications.filter((n) => !n.read).length}
-              </span>
-            </button> */}
-          </div>
-        </header>
-
-        <main className="main-content">
-          <WelcomeSection />
-          <NotificationsSection />
-        </main>
-      </div>
-    );
+  const handleInputChange = (e) => {
+    setNewNotification(e.target.value);
   };
 
   return (
     <div className="app">
       <Sidebar />
-      <Dashboard />
+      <Dashboard
+        adminName={adminName}
+        notifications={notifications}
+        newNotification={newNotification}
+        handleInputChange={handleInputChange}
+        sendNotification={sendNotification}
+      />
     </div>
   );
 }
+
+const WelcomeSection = ({ adminName }) => {
+  const currentTime = new Date();
+  const hours = currentTime.getHours();
+  let greeting = hours < 12 ? 'Good Morning' : hours < 18 ? 'Good Afternoon' : 'Good Evening';
+
+  return (
+    <div className="welcome-section">
+      <h1>{greeting}, {adminName}! 👋</h1>
+      <p>Manage your notifications efficiently from the dashboard.</p>
+    </div>
+  );
+};
+
+const SendNotificationSection = ({ newNotification, handleInputChange, sendNotification, notifications }) => {
+  return (
+    <div className="send-notification-section">
+      <h2>📢 Send a Notification</h2>
+      <div className="send-notification-form">
+        <input
+          type="text"
+          placeholder="Enter notification message..."
+          value={newNotification}
+          onChange={handleInputChange}
+        />
+        <button className="send-btn" onClick={sendNotification}>
+          🚀 Send
+        </button>
+      </div>
+
+      {notifications.length > 0 && (
+        <div className="sent-notifications">
+          <h3>📩 Sent Notifications</h3>
+          <ul>
+            {notifications.map((notification) => (
+              <li key={notification.id}>
+                <span>{notification.title}</span>
+                <span className="time">{notification.time}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const Dashboard = ({ adminName, notifications, newNotification, handleInputChange, sendNotification }) => {
+  return (
+    <div className="dashboard-content">
+      <header className="dashboard-header">
+        <div className="search-bar">
+          <input type="text" placeholder="Search..." />
+        </div>
+      </header>
+
+      <main className="main-content">
+        <WelcomeSection adminName={adminName} />
+        <SendNotificationSection
+          newNotification={newNotification}
+          handleInputChange={handleInputChange}
+          sendNotification={sendNotification}
+          notifications={notifications}
+        />
+      </main>
+    </div>
+  );
+};
 
 export default App;

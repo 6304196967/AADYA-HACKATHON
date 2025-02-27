@@ -3,6 +3,42 @@ import axios from "axios";
 import "../../styles/Alumni.css";
 import Sidebar from "../Components/adminsidebar";
 
+const eventsData = [
+  {
+    id: 1,
+    title: "Tech Talk: AI in 2024",
+    date: "2024-01-15",
+    time: "6:00 PM",
+    speaker: "Dr. Jane Doe",
+    description: "Join us for an insightful session on the future of AI and its impact on industries.",
+  },
+  {
+    id: 2,
+    title: "Webinar: Career Growth in Tech",
+    date: "2024-02-10",
+    time: "5:00 PM",
+    speaker: "John Smith",
+    description: "Learn how to navigate your career in the tech industry with practical tips and advice.",
+  },
+];
+
+const jobsData = [
+  {
+    id: 1,
+    title: "Software Engineer",
+    company: "Microsoft",
+    location: "Redmond, WA",
+    description: "We are looking for a skilled software engineer to join our team.",
+  },
+  {
+    id: 2,
+    title: "Data Scientist",
+    company: "Amazon",
+    location: "Seattle, WA",
+    description: "Join our data science team to work on cutting-edge machine learning projects.",
+  },
+];
+
 const alumniData = [
   {
     id: 1,
@@ -27,45 +63,6 @@ const alumniData = [
     email: "m.rodriguez@example.com",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
     expertise: ["Machine Learning", "Neural Networks", "PyTorch", "Research"],
-  },
-];
-
-const eventsData = [
-  {
-    id: 1,
-    title: "AI & ML Webinar",
-    date: "March 10, 2025",
-    time: "5:00 PM IST",
-    description: "Join us for an insightful webinar on AI trends in 2025.",
-    link: "#",
-  },
-  {
-    id: 2,
-    title: "Startup Growth Summit",
-    date: "April 15, 2025",
-    time: "3:00 PM IST",
-    description: "Hear from top founders about their startup journeys.",
-    link: "#",
-  },
-];
-
-const jobsData = [
-  {
-    id: 1,
-    title: "Software Engineer",
-    company: "Amazon",
-    location: "Bangalore, India",
-    description:
-      "Looking for a full-stack engineer with React & Node.js experience.",
-    applyLink: "#",
-  },
-  {
-    id: 2,
-    title: "Data Scientist",
-    company: "Tesla",
-    location: "California, USA",
-    description: "Work on AI-driven analytics and big data pipelines.",
-    applyLink: "#",
   },
 ];
 
@@ -104,10 +101,11 @@ export default function AlumniConnect() {
 
       setShowModal(false);
       setConnectionSent(true);
+      setFormData({ name: "", description: "", reason: "" }); // Reset form data
       setTimeout(() => setConnectionSent(false), 3000); // Reset message after 3 seconds
     } catch (error) {
       console.error("Error sending connection request:", error);
-      alert("Failed to send connection request.");
+      alert("Failed to send connection request. Please try again later.");
     }
   };
 
@@ -161,63 +159,9 @@ export default function AlumniConnect() {
                   {alumni.profession} at {alumni.company}
                 </p>
                 <p>📍 {alumni.location}</p>
-                <button
-                  className="connect-button"
-                  onClick={() => handleConnect(alumni)}
-                >
+                <button className="connect-button" onClick={() => handleConnect(alumni)}>
                   💬 Connect
                 </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {view === "events" && (
-        <div>
-          <button className="back-button" onClick={() => setView("home")}>
-            ⬅ Back
-          </button>
-          <h2>Upcoming Events & Webinars</h2>
-          <div className="events-list">
-            {eventsData.map((event) => (
-              <div key={event.id} className="event-card">
-                <h3>{event.title}</h3>
-                <p>
-                  {event.date} | {event.time}
-                </p>
-                <p>{event.description}</p>
-                <button
-                  className={`register-button ${
-                    registeredEvents[event.id] ? "registered" : ""
-                  }`}
-                  onClick={() => handleRegister(event.id)}
-                  disabled={registeredEvents[event.id]}
-                >
-                  {registeredEvents[event.id] ? "Registered" : "Register"}
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {view === "jobs" && (
-        <div>
-          <button className="back-button" onClick={() => setView("home")}>
-            ⬅ Back
-          </button>
-          <h2>Job Opportunities</h2>
-          <div className="jobs-list">
-            {jobsData.map((job) => (
-              <div key={job.id} className="job-card">
-                <h3>{job.title}</h3>
-                <p>🏢 {job.company}</p>
-                <p>📍 {job.location}</p>
-                <p>{job.description}</p>
-                <a href={job.applyLink} className="apply-button">
-                  Apply
-                </a>
               </div>
             ))}
           </div>
@@ -232,33 +176,62 @@ export default function AlumniConnect() {
               type="text"
               placeholder="Your Name"
               value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             />
             <textarea
               placeholder="Short Description"
               value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             ></textarea>
             <button className="submit-button" onClick={submitConnectionRequest}>
               Submit
             </button>
-            <button
-              className="close-button"
-              onClick={() => setShowModal(false)}
-            >
+            <button className="close-button" onClick={() => setShowModal(false)}>
               Close
             </button>
           </div>
         </div>
       )}
 
-      {connectionSent && (
-        <div className="confirmation-message">
-          Connection Sent, Wait for Response
+      {connectionSent && <div className="confirmation-message">Connection Sent, Wait for Response</div>}
+
+      {view === "events" && (
+        <div>
+          <button className="back-button" onClick={() => setView("home")}>
+            ⬅ Back
+          </button>
+          <div className="events-list">
+            {eventsData.map((event) => (
+              <div key={event.id} className="event-card">
+                <h3>{event.title}</h3>
+                <p>
+                  📅 {event.date} | 🕒 {event.time}
+                </p>
+                <p>🎤 Speaker: {event.speaker}</p>
+                <p>{event.description}</p>
+                <button className="register-button">Register</button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {view === "jobs" && (
+        <div>
+          <button className="back-button" onClick={() => setView("home")}>
+            ⬅ Back
+          </button>
+          <div className="jobs-list">
+            {jobsData.map((job) => (
+              <div key={job.id} className="job-card">
+                <h3>{job.title}</h3>
+                <p>🏢 {job.company}</p>
+                <p>📍 {job.location}</p>
+                <p>{job.description}</p>
+                <button className="apply-button">Apply Now</button>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
