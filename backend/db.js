@@ -28,9 +28,9 @@ const clubSchema = new mongoose.Schema({
     name: { type: String, required: true },
     image: { type: String, required: true }, 
     description: { type: String, required: true },
-    totalStudents: { type: Number, default: 0 }, // Since frontend sends totalMembers, we map it to this
+    totalStudents: { type: Number, default: 0 }, 
     studentsByYear: { type: Object, default: {} },
-    members: { type: Array, default: [] } // Default empty array to avoid null issues
+    members: { type: Array, default: [] } 
   });
 
 const SchedulSchema = new mongoose.Schema({

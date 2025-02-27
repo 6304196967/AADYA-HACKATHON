@@ -32,7 +32,7 @@ const ClubPage = () => {
               key={club.id}
               onClick={() => handleCardClick(club)}
             >
-              <img src={club.imageURL} alt={club.name} className="club-img" />
+              <img src={club.image} alt={club.name} className="club-img" />
               <div className="club-info">
                 <h3>{club.name}</h3>
                 <p>{club.description}</p>

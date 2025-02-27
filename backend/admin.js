@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { PostModel } = require("./db"); // Adjust path if needed
+const { PostModel } = require("./db"); 
 
 const adminRouter = Router();
 
@@ -12,8 +12,8 @@ adminRouter.post("/posts", async (req, res) => {
       title, 
       content, 
       user: user || "Anonymous", 
-      timestamp: Date.now(), // ✅ Ensure timestamp is added
-      replies: [] // ✅ Ensure replies array is initialized
+      timestamp: Date.now(), 
+      replies: [] 
     });
     
     await newPost.save();
