@@ -42,7 +42,6 @@ function App() {
       <div className="welcome-section">
         <h1>{greeting}, User!</h1>
         <p>Welcome to your dashboard. Here's your overview for today.</p>
-        <button className="action-button">View Reports</button>
       </div>
     );
   };
