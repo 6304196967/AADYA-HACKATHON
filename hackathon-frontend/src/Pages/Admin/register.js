@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/Signup.css";
+import "../../styles/Signup.css";
 import { Link } from "react-router-dom";
-
+import Sidebar from "../Components/adminsidebar";
 function Signup() {
   const navigate = useNavigate();
 
@@ -65,8 +65,9 @@ function Signup() {
 
   return (
     <div className="signup-container">
+        <Sidebar />
       <div className="signup-card">
-        <h1 className="signup-title">Create Account</h1>
+        <h1 className="signup-title">Create Account for Admin,Faculty,Club co-ordinator</h1>
         <form className="signup-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="username">Username:</label>
@@ -131,8 +132,10 @@ function Signup() {
               required
             >
               <option value="">-- Select Role --</option>
-              <option value="Student">Student</option>
-              <option value="Alumni">Alumni</option>
+              <option value="Admin">Admin</option>
+              <option value="Faculty">Faculty</option>
+              <option value="Club Coordinator">Club Coordinator</option>
+
             </select>
           </div>
 
