@@ -1,42 +1,29 @@
-const express = require("express");
-const notificationRouter = express.Router();
+const { Router } = require("express");
+const { notificationModel } = require("./db"); // Ensure correct import
 
-const notifications = [
-  {
-    id: 1,
-    title: "New Event",
-    message: "AI Webinar starts in 2 hours!",
-    time: "10:00 AM",
-  },
-  {
-    id: 2,
-    title: "Assignment Due",
-    message: "Submit your ML assignment by tonight.",
-    time: "5:00 PM",
-  },
-];
+const notificationRouter = Router();
 
-const reminders = [
-  {
-    id: 1,
-    title: "Project Meeting",
-    message: "Don't forget your team meeting at 3 PM.",
-    time: "3:00 PM",
-  },
-  {
-    id: 2,
-    title: "Gym Session",
-    message: "Workout session at 6 PM.",
-    time: "6:00 PM",
-  },
-];
-
-notificationRouter.get("/notification", (req, res) => {
-  res.json(notifications);
+notificationRouter.get("/notifications", async (req, res) => {
+  try {
+    const notifications = await notificationModel.find();
+    res.json(notifications);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-notificationRouter.get("/reminder", (req, res) => {
-  res.json(reminders);
+notificationRouter.post("/notifications", async (req, res) => {
+  try {
+    const { data } = req.body;
+    if (!data) return res.status(400).json({ error: "Data is required" });
+
+    const newNotification = new notificationModel({ data });
+    await newNotification.save();
+
+    res.status(201).json({ message: "Notification added successfully", notification: newNotification });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 module.exports = notificationRouter;

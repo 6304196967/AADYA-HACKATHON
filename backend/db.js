@@ -76,9 +76,14 @@ const TimeTableSchema = new mongoose.Schema({
   faculty: String,
 });
 
+const notificationSchema = new mongoose.Schema({
+    data : String},
+    {timestamps :true
+});
+
 const ExamSchedule = mongoose.model("ExamSchedule", ExamScheduleSchema);
 const TimeTable = mongoose.model("TimeTable", TimeTableSchema);
-
+const notificationModel = mongoose.model("notification",notificationSchema);
 const internModel = mongoose.model("Opportunity", internSchema);
 const aConnectModel = mongoose.model('alumni', alumniConnectSchema);
 const UserModel = mongoose.model('users', UserSchema);
@@ -94,6 +99,8 @@ module.exports = {
     internModel : internModel,
     schemaModel : schemaModel,
     ExamSchedule : ExamSchedule,
-    TimeTable : TimeTable
+    TimeTable : TimeTable,
+    notificationModel : notificationModel
 
 };
+
