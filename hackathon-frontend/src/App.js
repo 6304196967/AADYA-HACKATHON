@@ -12,7 +12,7 @@ import Aschedule from "./Pages/Admin/schedule";
 import Aclubs from "./Pages/Admin/Clubs";
 import Adiscussions from "./Pages/Admin/Discussions";
 import Aalumni from "./Pages/Admin/Alumni";
-
+import Aregister from "./Pages/Admin/register";
 import FDashboard from "./Pages/Faculty/Dashboard";
 import Fschedule from "./Pages/Faculty/schedule";
 import Fclubs from "./Pages/Faculty/Clubs";
@@ -53,7 +53,9 @@ function App() {
         <Route path="/admin/schedule" element={<Aschedule />} />
         <Route path="/admin/clubs" element={<Aclubs />} />
         <Route path="/admin/discussions" element={<Adiscussions />} />
-        <Route path="/admin/alumni" element={<Aalumni />} />       
+        <Route path="/admin/alumni" element={<Aalumni />} />  
+        <Route path="/admin/register" element={<Aregister />} />  
+
         {/* <Route path="/ClubPage" element={<Aclubsh />} />
         <Route path="/alumini" element={<Alumni />} />  */}
         
