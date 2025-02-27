@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router();
+const scheduleRouter = express.Router();
 
 // Hardcoded Exam Schedule
 const examSchedule = {
@@ -38,13 +38,13 @@ const timeTable = [
 ];
 
 // API to get Exam Schedule
-router.get("/exam-schedule", (req, res) => {
+scheduleRouter.get("/exam-schedule", (req, res) => {
   res.json(examSchedule);
 });
 
 // API to get Time Table
-router.get("/time-table", (req, res) => {
+scheduleRouter.get("/time-table", (req, res) => {
   res.json(timeTable);
 });
 
-module.exports = router; // Exporting the router
+module.exports = scheduleRouter; // Exporting the router

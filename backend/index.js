@@ -7,6 +7,7 @@ const clubRouter = require('./club');
 const alumniRouter = require('./alumni');
 const internRouter = require("./intern");
 const scheduleRouter = require('./schedule');
+const notificationRouter = require('./notification');
 const app = express();
 app.use(express.json());  
 app.use(cors());
@@ -16,6 +17,7 @@ app.use("/api/clubs", clubRouter);
 app.use("/api/alumni", alumniRouter);
 app.use("/api/intern", internRouter);
 app.use("/api/schedule", scheduleRouter);
+app.use("/api/noti", notificationRouter);
 
 
 async function main() {
